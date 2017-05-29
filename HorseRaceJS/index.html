@@ -23,9 +23,9 @@
                     <div class="form-group">
                         <label for="horseName" class="control-label">Horse name</label>
                         <div class="input-group">
-                            <input type="text" id="horseName" placeholder="Enter your horse name" class="form-control" ng-model="horseName"/>
+                            <input type="text" id="horseName" placeholder="Enter your horse name" class="form-control" ng-model="horseName" ng-disabled="raceInProgress"/>
                             <span class="input-group-btn">
-                                <input type="submit" value="Add" class="btn btn-success" ng-click="addHorse(horseName)"/>
+                                <input type="submit" value="Add" class="btn btn-success" ng-click="addHorse(horseName)" ng-disabled="horseName == '' || horseName == undefined"/>
                             </span>
                         </div>
                     </div>
@@ -45,7 +45,8 @@
         </section>
         <hr/>
         <section>
-            <input type="button" value="Start race" class="btn btn-block btn-success" ng-click="startRace()"/>
+            <input type="button" value="Start race" class="btn btn-block btn-success" ng-click="startRace()" ng-disabled="raceInProgress || horses.length == 0"/>
+            <input type="button" value="Reset" class="btn btn-block btn-danger" ng-click="resetHorses()" ng-disabled="raceInProgress || horses.length == 0" />
         </section>
 
         <footer>

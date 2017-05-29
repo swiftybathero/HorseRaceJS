@@ -57,6 +57,7 @@
             }
         };
 
+        $scope.raceInProggress = false;
         var resetRace = function () {
             var isSetup = false;
             for (var i = 0; i < $scope.horses.length; i++) {
@@ -68,7 +69,7 @@
             return isSetup;
         };
 
-        var timeoutWatcher = undefined;
+        $scope.timeoutWatcher = undefined;
         var onRun = function () {
             var winners = [];
             for (var i = 0; i < $scope.horses.length; i++) {
@@ -80,17 +81,18 @@
                 };
             };
 
-            if (winners.length != 0 && angular.isDefined(timeoutWatcher)) {
-                $timeout.cancel(timeoutWatcher);
-                timeoutWatcher = undefined;
+            if (winners.length != 0 && angular.isDefined($scope.timeoutWatcher)) {
+                $timeout.cancel($scope.timeoutWatcher);
+                $scope.timeoutWatcher = undefined;
+                $scope.raceInProgress = false;
             }
             else {
-                timeoutWatcher = $timeout(onRun, $scope.timeoutInterval);
+                $scope.timeoutWatcher = $timeout(onRun, $scope.timeoutInterval);
             };
         };
         $scope.startRace = function () {
-
-            if (angular.isDefined(timeoutWatcher) || $scope.horses.length == 0) {
+            $scope.raceInProgress = true;
+            if (angular.isDefined($scope.timeoutWatcher) || $scope.horses.length == 0) {
                 return;
             };
 
@@ -99,7 +101,11 @@
                 return;
             };
 
-            timeoutWatcher = $timeout(onRun, $scope.timeoutInterval);
+            $scope.timeoutWatcher = $timeout(onRun, $scope.timeoutInterval);
+        };
+
+        $scope.resetHorses = function () {
+            $scope.horses = [];
         };
 
         $scope.minRandom = 1;
