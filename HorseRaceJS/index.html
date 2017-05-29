@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/main.min.css" rel="stylesheet" />
+    <script src="Scripts/angular.min.js"></script>
+    <script src="Scripts/angular-route.min.js"></script>
+    <script src="Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+    <script src="Scripts/app/HorseRaceApp.js"></script>
+    <script src="Scripts/app/RandomService.js"></script>
+    <script src="Scripts/app/horseController.js"></script>
+    <title>Horse Race JS</title>
+</head>
+<body ng-app="horseRaceApp">
+    <div class="container" ng-controller="horseController">
+        <header class="page-header">
+            <h1>Horse Race JS!</h1>
+        </header>
+        <section>
+            <form role="form">
+                <fieldset>
+                    <div class="form-group">
+                        <label for="horseName" class="control-label">Horse name</label>
+                        <div class="input-group">
+                            <input type="text" id="horseName" placeholder="Enter your horse name" class="form-control" ng-model="horseName"/>
+                            <span class="input-group-btn">
+                                <input type="submit" value="Add" class="btn btn-success" ng-click="addHorse(horseName)"/>
+                            </span>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </section>
+
+        <section>
+            <div class="row">
+                <div ng-repeat="horse in horses">
+                    <label for="horse" class="control-label col-sm-2">{{horse.name}}</label>
+                    <div class="col-sm-10">
+                        <uib-progressbar max="maxValue" value="horse.position"/>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <input type="button" value="Start race" class="btn btn-success" ng-click="startRace()"/>
+            </div>
+        </section>
+
+        <footer>
+            
+        </footer>
+    </div>
+</body>
+</html>
