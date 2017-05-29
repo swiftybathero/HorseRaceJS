@@ -2,7 +2,7 @@
 
     var module = angular.module("horseRaceApp");
 
-    var horseController = function ($scope, $interval, random) {
+    var horseController = function ($scope, $timeout, random) {
 
         function Horse(horseName) {
 
@@ -15,22 +15,38 @@
             var position = 0;
 
             var run = function () {
-                var move = random.next(1, 5);
+                var move = random.next($scope.minRandom, $scope.maxRandom);
 
-                if (position + move >= $scope.maxValue) {
-                    position = $scope.maxValue;
-                    isWinner = true;
+                if (this.position + move >= $scope.maxValue) {
+                    this.position = $scope.maxValue;
+                    this.isWinner = true;
                 }
                 else {
-                    position += move;
+                    this.position += move;
                 }
+            };
+
+            var contestantType = function () {
+                if (this.isWinner == true) {
+                    return "success";
+                }
+                else {
+                    return null;
+                };
+            };
+
+            var resetHorse = function () {
+                this.position = 0;
+                this.isWinner = false;
             };
 
             return {
                 name: name,
                 isWinner: isWinner,
                 position: position,
-                run: run
+                run: run,
+                resetHorse: resetHorse,
+                contestantType: contestantType
             };
         };
 
@@ -41,33 +57,54 @@
             }
         };
 
-        var intervalWatcher = undefined;
+        var resetRace = function () {
+            var isSetup = false;
+            for (var i = 0; i < $scope.horses.length; i++) {
+                if ($scope.horses[i].position != 0) {
+                    $scope.horses[i].resetHorse();
+                    isSetup = true;
+                }
+            }
+            return isSetup;
+        };
+
+        var timeoutWatcher = undefined;
         var onRun = function () {
             var winners = [];
-            for (var i = 0; i <= $scope.horses.length; i++) {
-                var horseRun = $scope.horses[i];
-                horseRun.run();
+            for (var i = 0; i < $scope.horses.length; i++) {
+                $scope.horses[i].run();
 
-                if (horseRun.position >= $scope.maxValue) {
-                    horseRun.isWinner = true;
-                    winners.push(horseRun);
+                if ($scope.horses[i].position >= $scope.maxValue) {
+                    $scope.horses[i].isWinner = true;
+                    winners.push($scope.horses[i]);
                 };
             };
 
-            if (winners.length != 0 && angular.isDefined(intervalWatcher)) {
-                $interval.cancel(intervalWatcher);
-                intervalWatcher = undefined;
+            if (winners.length != 0 && angular.isDefined(timeoutWatcher)) {
+                $timeout.cancel(timeoutWatcher);
+                timeoutWatcher = undefined;
+            }
+            else {
+                timeoutWatcher = $timeout(onRun, $scope.timeoutInterval);
             };
         };
         $scope.startRace = function () {
 
-            if (angular.isDefined(intervalWatcher) || $scope.horses.length == 0) {
+            if (angular.isDefined(timeoutWatcher) || $scope.horses.length == 0) {
                 return;
             };
 
-            intervalWatcher = $interval(onRun, 50);
+            if (resetRace()) {
+                $timeout($scope.startRace, 1000);
+                return;
+            };
+
+            timeoutWatcher = $timeout(onRun, $scope.timeoutInterval);
         };
 
+        $scope.minRandom = 1;
+        $scope.maxRandom = 15;
+        $scope.timeoutInterval = 200;
         $scope.maxValue = 500;
         $scope.horses = [];
 
