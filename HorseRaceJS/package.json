@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "asp.net",
+  "name": "horserace-js",
   "private": true,
   "devDependencies": {
     "gulp": "^3.9.1",

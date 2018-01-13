@@ -1,4 +1,5 @@
-﻿/*
+/// <binding AfterBuild='default' />
+/*
 This file is the main entry point for defining Gulp tasks and using Gulp plugins.
 Click here to learn more. https://go.microsoft.com/fwlink/?LinkId=518007
 */
@@ -29,4 +30,8 @@ gulp.task('process-js-app', ['clean'], function () {
         .pipe(annotate())
         .pipe(uglify())
         .pipe(gulp.dest(scripts.output));
+});
+
+gulp.task('watch-default', function () {
+    return gulp.watch(scripts.input, ['default']);
 });
