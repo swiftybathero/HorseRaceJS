@@ -1,6 +1,7 @@
-﻿[
+[
   {
     "outputFile": "Content/main.css",
-    "inputFile": "Content/main.less"
+    "inputFile": "Content/main.less",
+    "sourceMap": false
   }
 ]
